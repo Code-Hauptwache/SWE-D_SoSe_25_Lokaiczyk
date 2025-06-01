@@ -12,3 +12,6 @@
 8. **Refactoring Support** - Helps rename variables and reorganize code safely
 9. **Version Control Integration** - Works with Git and other version systems
 10. **Plugin Support** - Can add extra features for different programming languages
+
+## Note
+*Screenshot of IDE installation would be added here in actual submission*
