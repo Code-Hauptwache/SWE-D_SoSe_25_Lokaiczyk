@@ -1,0 +1,64 @@
+@startuml Website Monitor System
+
+class User {
+    - userId: String
+    - username: String
+    - email: String
+    - phoneNumber: String
+    
+    + register(): void
+    + login(): void
+    + manageSubscriptions(): void
+}
+
+class Website {
+    - websiteId: String
+    - url: String
+    - lastChecked: Date
+    - lastModified: Date
+    
+    + checkForUpdates(): boolean
+    + getContent(): String
+}
+
+class Subscription {
+    - subscriptionId: String
+    - frequency: int
+    - communicationChannel: String
+    - isActive: boolean
+    - createdDate: Date
+    
+    + modify(): void
+    + cancel(): void
+    + activate(): void
+}
+
+class NotificationService {
+    + generateNotification(): Notification
+    + sendNotification(): void
+    + scheduleCheck(): void
+}
+
+class Notification {
+    - notificationId: String
+    - message: String
+    - timestamp: Date
+    - status: String
+    
+    + send(): void
+}
+
+class MonitoringSystem {
+    + periodicCheck(): void
+    + processUpdates(): void
+}
+
+' Relationships
+User ||--o{ Subscription : creates
+Subscription }o--|| Website : monitors
+NotificationService ..> Notification : creates
+MonitoringSystem --> Website : checks
+MonitoringSystem --> NotificationService : uses
+User <-- Notification : receives
+
+@enduml
