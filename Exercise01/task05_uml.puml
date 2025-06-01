@@ -1,0 +1,40 @@
+@startuml Developer Class Diagram
+
+class Developer {
+    - String name
+    - int age
+    - String email
+    - String programmingLanguage
+    - int yearsOfExperience
+    
+    + Developer(name: String, age: int, email: String)
+    + getName(): String
+    + setName(name: String): void
+    + getAge(): int
+    + setAge(age: int): void
+    + getEmail(): String
+    + setEmail(email: String): void
+    + getProgrammingLanguage(): String
+    + setProgrammingLanguage(language: String): void
+    + getYearsOfExperience(): int
+    + setYearsOfExperience(years: int): void
+    + writeCode(): void
+    + debugCode(): void
+    + reviewCode(): void
+    + learnNewTechnology(): void
+    + toString(): String
+}
+
+@enduml
+
+@startuml Developer Object Diagram
+
+object "myself : Developer" as myself {
+    name = "John Student"
+    age = 22
+    email = "john.student@university.edu"
+    programmingLanguage = "Java"
+    yearsOfExperience = 2
+}
+
+@enduml
