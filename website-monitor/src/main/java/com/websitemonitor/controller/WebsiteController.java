@@ -23,12 +23,11 @@ public class WebsiteController {
         // Check if website already exists
         Website website = findOrCreateWebsite(url);
         
-        // Create subscription
+        // Create subscription (it will automatically register as observer)
         String subscriptionId = UUID.randomUUID().toString();
         Subscription subscription = new Subscription(subscriptionId, user, website, frequency, channel);
         
         subscriptions.put(subscriptionId, subscription);
-        monitoringService.addSubscription(subscription);
         
         System.out.println("Created subscription for user " + user.getUsername() + 
                           " to monitor " + url);
@@ -47,7 +46,7 @@ public class WebsiteController {
     public void cancelSubscription(String subscriptionId) {
         Subscription subscription = subscriptions.get(subscriptionId);
         if (subscription != null) {
-            subscription.cancel();
+            subscription.cancel(); // This will detach from website
             System.out.println("Cancelled subscription " + subscriptionId);
         }
     }
@@ -78,6 +77,7 @@ public class WebsiteController {
     
     public void manageSubscriptions() {
         System.out.println("Managing " + subscriptions.size() + " subscriptions");
+        System.out.println("Monitoring " + websites.size() + " websites");
         monitoringService.periodicCheck();
     }
     
@@ -92,7 +92,15 @@ public class WebsiteController {
         String websiteId = UUID.randomUUID().toString();
         Website website = new Website(websiteId, url);
         websites.put(websiteId, website);
+        
+        // Add to monitoring service
+        monitoringService.addWebsite(website);
+        
         return website;
+    }
+    
+    public void addUser(User user) {
+        users.put(user.getUserId(), user);
     }
     
     // Getters for metrics calculation

@@ -1,0 +1,126 @@
+@startuml Observer Pattern - Website Monitor System
+
+' Observer Pattern Interfaces
+interface WebsiteSubject {
+    + attach(observer: WebsiteObserver): void
+    + detach(observer: WebsiteObserver): void
+    + notifyObservers(updateInfo: String): void
+}
+
+interface WebsiteObserver {
+    + onWebsiteUpdated(website: Website, updateInfo: String): void
+}
+
+' Concrete Classes
+class Website {
+    - websiteId: String
+    - url: String
+    - lastChecked: Date
+    - lastModified: Date
+    - observers: List<WebsiteObserver>
+    
+    + checkForUpdates(): boolean
+    + getContent(): String
+}
+
+class Subscription {
+    - subscriptionId: String
+    - user: User
+    - website: Website
+    - frequency: int
+    - communicationChannel: String
+    - isActive: boolean
+    - notificationService: NotificationService
+    
+    + modify(frequency: int, channel: String): void
+    + cancel(): void
+    + activate(): void
+}
+
+class User {
+    - userId: String
+    - username: String
+    - email: String
+    - phoneNumber: String
+}
+
+class Notification {
+    - notificationId: String
+    - message: String
+    - timestamp: Date
+    - status: String
+    - recipient: User
+    - channel: String
+    
+    + send(): void
+}
+
+class NotificationService <<Singleton>> {
+    - instance: NotificationService
+    
+    + getInstance(): NotificationService
+    + generateNotification(subscription: Subscription, updateMessage: String): Notification
+    + sendNotification(notification: Notification): void
+}
+
+class MonitoringService {
+    - monitoredWebsites: List<Website>
+    
+    + addWebsite(website: Website): void
+    + removeWebsite(website: Website): void
+    + periodicCheck(): void
+}
+
+class WebsiteController {
+    - users: Map<String, User>
+    - websites: Map<String, Website>
+    - subscriptions: Map<String, Subscription>
+    - monitoringService: MonitoringService
+    
+    + createSubscription(user: User, url: String, frequency: int, channel: String): Subscription
+    + modifySubscription(subscriptionId: String, frequency: int, channel: String): void
+    + cancelSubscription(subscriptionId: String): void
+    + manageSubscriptions(): void
+}
+
+' Relationships
+Website ..|> WebsiteSubject : implements
+Subscription ..|> WebsiteObserver : implements
+
+Website o--> "*" WebsiteObserver : observers
+Subscription --> "1" Website : monitors
+Subscription --> "1" User : belongs to
+Subscription --> NotificationService : uses
+
+NotificationService ..> Notification : creates
+NotificationService ..> Subscription : uses
+NotificationService ..> User : uses
+
+MonitoringService --> "*" Website : monitors
+WebsiteController --> MonitoringService : uses
+WebsiteController --> "*" User : manages
+WebsiteController --> "*" Website : manages
+WebsiteController --> "*" Subscription : manages
+
+Notification --> User : recipient
+
+' Notes
+note right of Website
+  When checkForUpdates() detects
+  a change, it calls notifyObservers()
+  to inform all subscriptions
+end note
+
+note left of Subscription
+  Implements onWebsiteUpdated()
+  to handle notifications when
+  the observed website changes
+end note
+
+note bottom of NotificationService
+  Singleton pattern ensures
+  single instance for all
+  notification handling
+end note
+
+@enduml

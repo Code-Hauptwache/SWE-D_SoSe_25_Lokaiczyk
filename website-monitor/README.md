@@ -1,6 +1,6 @@
-# Website Monitor System
+# Website Monitor System - Observer Pattern Implementation
 
-A simple Java implementation of a website monitoring system that notifies users when websites are updated.
+A Java implementation of a website monitoring system using the Observer design pattern.
 
 ## Project Structure
 
@@ -8,11 +8,14 @@ A simple Java implementation of a website monitoring system that notifies users 
 src/main/java/com/websitemonitor/
 ├── model/
 │   ├── User.java
-│   ├── Website.java
-│   ├── Subscription.java
+│   ├── Website.java (Subject)
+│   ├── Subscription.java (Observer)
 │   └── Notification.java
+├── observer/
+│   ├── WebsiteObserver.java
+│   └── WebsiteSubject.java
 ├── service/
-│   ├── NotificationService.java
+│   ├── NotificationService.java (Singleton)
 │   └── MonitoringService.java
 ├── controller/
 │   └── WebsiteController.java
@@ -20,11 +23,22 @@ src/main/java/com/websitemonitor/
 └── MetricsCalculator.java
 ```
 
+## Observer Pattern Implementation
+
+- **Subject**: `Website` implements `WebsiteSubject`
+  - Maintains list of observers
+  - Notifies observers when updates detected
+  
+- **Observer**: `Subscription` implements `WebsiteObserver`
+  - Registers with website automatically
+  - Handles notifications when website updates
+
 ## Features
 
-- User management
-- Website monitoring with update detection
-- Subscription management (create, modify, cancel)
+- Observer pattern for loose coupling
+- Multiple subscriptions can observe same website
+- Automatic notification on website updates
+- Singleton pattern for NotificationService
 - Mock notification system (email, SMS)
 - Coupling metrics calculation
 
@@ -36,24 +50,13 @@ javac com/websitemonitor/*.java com/websitemonitor/*/*.java
 java com.websitemonitor.Main
 ```
 
-## Coupling Metrics
+## Design Benefits
 
-The system calculates:
-- **Afferent Coupling (Ca)**: Number of classes that depend on this class
-- **Efferent Coupling (Ce)**: Number of classes this class depends on
-- **Instability (I)**: Ce / (Ca + Ce)
+1. **Loose Coupling**: Websites don't know about notification details
+2. **Flexibility**: Easy to add/remove observers dynamically
+3. **Single Responsibility**: Each class has one clear purpose
+4. **Open/Closed Principle**: Can extend without modifying existing code
 
-## Design Decisions
+## UML Diagram
 
-1. **Package Structure**: Organized by layer (model, service, controller)
-2. **Low Coupling**: Services are loosely coupled through dependency injection pattern
-3. **High Cohesion**: Each class has a single, well-defined responsibility
-4. **Mock Implementation**: Notifications and website checking are mocked for simplicity
-
-## Options to Reduce Coupling
-
-1. Use interfaces for services
-2. Implement dependency injection framework
-3. Use event-driven architecture
-4. Apply facade pattern
-5. Extract common interfaces for model classes
+See `observer_pattern_uml.puml` for the complete class diagram showing the Observer pattern structure.

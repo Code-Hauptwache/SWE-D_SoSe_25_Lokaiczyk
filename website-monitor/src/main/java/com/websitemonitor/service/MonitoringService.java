@@ -2,51 +2,44 @@ package com.websitemonitor.service;
 
 import com.websitemonitor.model.Subscription;
 import com.websitemonitor.model.Website;
-import com.websitemonitor.model.Notification;
 import java.util.List;
 import java.util.ArrayList;
 
 public class MonitoringService {
-    private NotificationService notificationService;
-    private List<Subscription> activeSubscriptions;
+    private List<Website> monitoredWebsites;
     
     public MonitoringService() {
-        this.notificationService = new NotificationService();
-        this.activeSubscriptions = new ArrayList<>();
+        this.monitoredWebsites = new ArrayList<>();
     }
     
-    public void addSubscription(Subscription subscription) {
-        activeSubscriptions.add(subscription);
-        notificationService.scheduleCheck(subscription);
+    public void addWebsite(Website website) {
+        if (!monitoredWebsites.contains(website)) {
+            monitoredWebsites.add(website);
+            System.out.println("Added website to monitoring: " + website.getUrl());
+        }
+    }
+    
+    public void removeWebsite(Website website) {
+        monitoredWebsites.remove(website);
+        System.out.println("Removed website from monitoring: " + website.getUrl());
     }
     
     public void periodicCheck() {
-        System.out.println("Running periodic check for all subscriptions...");
+        System.out.println("Running periodic check for all websites...");
         
-        for (Subscription subscription : activeSubscriptions) {
-            if (subscription.isActive()) {
-                processUpdates(subscription);
+        for (Website website : monitoredWebsites) {
+            // Simply trigger the check - observers will be notified automatically
+            boolean updated = website.checkForUpdates();
+            
+            if (updated) {
+                System.out.println("Update detected for: " + website.getUrl());
+            } else {
+                System.out.println("No updates for: " + website.getUrl());
             }
         }
     }
     
-    public void processUpdates(Subscription subscription) {
-        Website website = subscription.getWebsite();
-        
-        if (website.checkForUpdates()) {
-            System.out.println("Update detected for: " + website.getUrl());
-            
-            Notification notification = notificationService.generateNotification(
-                subscription, "Website has been updated!"
-            );
-            
-            notificationService.sendNotification(notification);
-        } else {
-            System.out.println("No updates for: " + website.getUrl());
-        }
-    }
-    
-    public List<Subscription> getActiveSubscriptions() {
-        return activeSubscriptions;
+    public List<Website> getMonitoredWebsites() {
+        return new ArrayList<>(monitoredWebsites);
     }
 }

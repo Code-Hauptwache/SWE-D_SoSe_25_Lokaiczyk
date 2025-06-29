@@ -6,6 +6,18 @@ import com.websitemonitor.model.User;
 import java.util.UUID;
 
 public class NotificationService {
+    private static NotificationService instance;
+    
+    private NotificationService() {
+        // Private constructor for singleton
+    }
+    
+    public static NotificationService getInstance() {
+        if (instance == null) {
+            instance = new NotificationService();
+        }
+        return instance;
+    }
     
     public Notification generateNotification(Subscription subscription, String updateMessage) {
         String notificationId = UUID.randomUUID().toString();
