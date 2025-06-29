@@ -2,12 +2,14 @@ package com.websitemonitor;
 
 import com.websitemonitor.controller.WebsiteController;
 import com.websitemonitor.model.User;
+import com.websitemonitor.model.Website;
+import com.websitemonitor.strategy.*;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("=== Website Monitor System with Observer Pattern ===\n");
+        System.out.println("=== Website Monitor System with Observer & Strategy Patterns ===\n");
         
         // Initialize controller
         WebsiteController controller = new WebsiteController();
@@ -19,35 +21,57 @@ public class Main {
         controller.addUser(user1);
         controller.addUser(user2);
         
-        // Create subscriptions (observers are automatically attached)
+        // Create subscriptions
         System.out.println("--- Creating Subscriptions ---");
         controller.createSubscription(user1, "https://example.com", 60, "email");
         controller.createSubscription(user1, "https://news.com", 30, "sms");
         controller.createSubscription(user2, "https://blog.com", 120, "email");
-        controller.createSubscription(user2, "https://example.com", 45, "sms");
         
-        System.out.println("\n--- Running First Check ---");
+        System.out.println("\n--- Testing Different Comparison Strategies ---");
+        
+        // Get websites and set different strategies
+        Map<String, Website> websites = controller.getWebsites();
+        Website exampleSite = null;
+        Website newsSite = null;
+        Website blogSite = null;
+        
+        for (Website site : websites.values()) {
+            if (site.getUrl().contains("example.com")) {
+                exampleSite = site;
+                site.setComparisonStrategy(new ContentSizeStrategy());
+            } else if (site.getUrl().contains("news.com")) {
+                newsSite = site;
+                site.setComparisonStrategy(new HtmlContentStrategy());
+            } else if (site.getUrl().contains("blog.com")) {
+                blogSite = site;
+                site.setComparisonStrategy(new TextContentStrategy());
+            }
+        }
+        
+        System.out.println("\n--- First Check with Different Strategies ---");
         controller.manageSubscriptions();
         
-        System.out.println("\n--- Modifying Subscription ---");
-        Map<String, Object> modifyParams = new HashMap<>();
-        modifyParams.put("subscriptionId", "1");
-        modifyParams.put("frequency", 90);
-        modifyParams.put("channel", "sms");
-        controller.handleUserRequest("modify", modifyParams);
+        System.out.println("\n--- Changing Strategy at Runtime ---");
+        if (exampleSite != null) {
+            exampleSite.setComparisonStrategy(new TextContentStrategy());
+        }
         
-        System.out.println("\n--- Running Second Check ---");
+        System.out.println("\n--- Second Check with Changed Strategy ---");
         controller.manageSubscriptions();
         
         System.out.println("\n--- Calculating Metrics ---");
         MetricsCalculator calculator = new MetricsCalculator();
         calculator.calculateAndPrintMetrics();
         
-        System.out.println("\n=== Observer Pattern Benefits ===");
-        System.out.println("1. Websites don't know about notifications - loose coupling");
-        System.out.println("2. Multiple subscriptions can observe the same website");
-        System.out.println("3. Subscriptions handle their own notifications");
-        System.out.println("4. Easy to add/remove observers dynamically");
+        System.out.println("\n=== Pattern Benefits ===");
+        System.out.println("Observer Pattern:");
+        System.out.println("- Loose coupling between subjects and observers");
+        System.out.println("- Dynamic subscription management");
+        
+        System.out.println("\nStrategy Pattern:");
+        System.out.println("- Different comparison algorithms encapsulated");
+        System.out.println("- Easy to add new comparison strategies");
+        System.out.println("- Runtime strategy switching");
         
         System.out.println("\n=== System Running ===");
     }

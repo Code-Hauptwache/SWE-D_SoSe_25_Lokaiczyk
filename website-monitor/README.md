@@ -1,6 +1,6 @@
-# Website Monitor System - Observer Pattern Implementation
+# Website Monitor System - Observer & Strategy Patterns
 
-A Java implementation of a website monitoring system using the Observer design pattern.
+A Java implementation of a website monitoring system using Observer and Strategy design patterns.
 
 ## Project Structure
 
@@ -8,12 +8,17 @@ A Java implementation of a website monitoring system using the Observer design p
 src/main/java/com/websitemonitor/
 ├── model/
 │   ├── User.java
-│   ├── Website.java (Subject)
+│   ├── Website.java (Subject + Strategy Context)
 │   ├── Subscription.java (Observer)
 │   └── Notification.java
 ├── observer/
 │   ├── WebsiteObserver.java
 │   └── WebsiteSubject.java
+├── strategy/
+│   ├── ComparisonStrategy.java
+│   ├── ContentSizeStrategy.java
+│   ├── HtmlContentStrategy.java
+│   └── TextContentStrategy.java
 ├── service/
 │   ├── NotificationService.java (Singleton)
 │   └── MonitoringService.java
@@ -23,21 +28,26 @@ src/main/java/com/websitemonitor/
 └── MetricsCalculator.java
 ```
 
-## Observer Pattern Implementation
+## Design Patterns Implemented
 
+### Observer Pattern
 - **Subject**: `Website` implements `WebsiteSubject`
-  - Maintains list of observers
-  - Notifies observers when updates detected
-  
 - **Observer**: `Subscription` implements `WebsiteObserver`
-  - Registers with website automatically
-  - Handles notifications when website updates
+- Automatic notification when websites update
+
+### Strategy Pattern
+- **Strategy**: `ComparisonStrategy` interface
+- **Concrete Strategies**:
+  - `ContentSizeStrategy`: Compares file size
+  - `HtmlContentStrategy`: Compares normalized HTML
+  - `TextContentStrategy`: Compares extracted text only
+- Runtime strategy switching
 
 ## Features
 
+- Multiple comparison strategies for website changes
 - Observer pattern for loose coupling
-- Multiple subscriptions can observe same website
-- Automatic notification on website updates
+- Strategy pattern for flexible comparison algorithms
 - Singleton pattern for NotificationService
 - Mock notification system (email, SMS)
 - Coupling metrics calculation
@@ -46,17 +56,32 @@ src/main/java/com/websitemonitor/
 
 ```bash
 cd website-monitor/src/main/java
-javac com/websitemonitor/*.java com/websitemonitor/*/*.java
+javac com/websitemonitor/*.java com/websitemonitor/model/*.java com/websitemonitor/service/*.java com/websitemonitor/controller/*.java com/websitemonitor/observer/*.java com/websitemonitor/strategy/*.java
 java com.websitemonitor.Main
 ```
 
 ## Design Benefits
 
-1. **Loose Coupling**: Websites don't know about notification details
-2. **Flexibility**: Easy to add/remove observers dynamically
-3. **Single Responsibility**: Each class has one clear purpose
-4. **Open/Closed Principle**: Can extend without modifying existing code
+1. **Observer Pattern**:
+   - Loose coupling between subjects and observers
+   - Dynamic subscription management
+   - Automatic update propagation
 
-## UML Diagram
+2. **Strategy Pattern**:
+   - Encapsulated comparison algorithms
+   - Runtime algorithm selection
+   - Easy to add new strategies
 
-See `observer_pattern_uml.puml` for the complete class diagram showing the Observer pattern structure.
+3. **Combined Benefits**:
+   - Flexible and extensible design
+   - Clear separation of concerns
+   - Maintainable and testable code
+
+## UML Diagrams
+
+- `observer_pattern_uml.puml` - Observer pattern structure
+- `strategy_pattern_uml.puml` - Strategy pattern structure
+
+## Coding Conventions
+
+See Exercise06/coding_conventions.md for detailed coding standards used in this project.

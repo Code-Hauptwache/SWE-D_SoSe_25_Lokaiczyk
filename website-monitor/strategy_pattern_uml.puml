@@ -1,0 +1,95 @@
+@startuml Strategy Pattern - Website Monitor System
+
+' Strategy Pattern Interface
+interface ComparisonStrategy {
+    + hasChanged(oldContent: String, newContent: String): boolean
+    + getStrategyName(): String
+}
+
+' Concrete Strategy Classes
+class ContentSizeStrategy {
+    + hasChanged(oldContent: String, newContent: String): boolean
+    + getStrategyName(): String
+}
+
+class HtmlContentStrategy {
+    + hasChanged(oldContent: String, newContent: String): boolean
+    + getStrategyName(): String
+    - normalizeHtml(html: String): String
+}
+
+class TextContentStrategy {
+    + hasChanged(oldContent: String, newContent: String): boolean
+    + getStrategyName(): String
+    - extractTextContent(html: String): String
+}
+
+' Context Class
+class Website {
+    - websiteId: String
+    - url: String
+    - lastContent: String
+    - comparisonStrategy: ComparisonStrategy
+    - observers: List<WebsiteObserver>
+    
+    + checkForUpdates(): boolean
+    + setComparisonStrategy(strategy: ComparisonStrategy): void
+    + getComparisonStrategy(): ComparisonStrategy
+    - fetchContent(): String
+}
+
+' Observer Pattern Classes (simplified)
+interface WebsiteObserver {
+    + onWebsiteUpdated(website: Website, updateInfo: String): void
+}
+
+class Subscription {
+    - subscriptionId: String
+    - user: User
+    - website: Website
+    
+    + onWebsiteUpdated(website: Website, updateInfo: String): void
+}
+
+' Relationships
+ContentSizeStrategy ..|> ComparisonStrategy : implements
+HtmlContentStrategy ..|> ComparisonStrategy : implements
+TextContentStrategy ..|> ComparisonStrategy : implements
+
+Website o--> "1" ComparisonStrategy : uses
+Website ..> ComparisonStrategy : delegates to
+
+Subscription ..|> WebsiteObserver : implements
+Website o--> "*" WebsiteObserver : notifies
+
+' Notes
+note right of Website
+  The Website class uses a
+  ComparisonStrategy to determine
+  if content has changed.
+  Strategy can be changed at runtime.
+end note
+
+note bottom of ComparisonStrategy
+  Strategy Pattern allows different
+  comparison algorithms to be used
+  interchangeably
+end note
+
+note left of ContentSizeStrategy
+  Compares only the
+  size (length) of content
+end note
+
+note left of HtmlContentStrategy
+  Normalizes and compares
+  full HTML content
+end note
+
+note left of TextContentStrategy
+  Extracts and compares
+  only text content,
+  ignoring HTML tags
+end note
+
+@enduml

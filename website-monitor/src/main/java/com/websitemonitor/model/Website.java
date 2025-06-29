@@ -2,6 +2,8 @@ package com.websitemonitor.model;
 
 import com.websitemonitor.observer.WebsiteSubject;
 import com.websitemonitor.observer.WebsiteObserver;
+import com.websitemonitor.strategy.ComparisonStrategy;
+import com.websitemonitor.strategy.ContentSizeStrategy;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +15,7 @@ public class Website implements WebsiteSubject {
     private Date lastModified;
     private String lastContent;
     private List<WebsiteObserver> observers;
+    private ComparisonStrategy comparisonStrategy;
     
     public Website(String websiteId, String url) {
         this.websiteId = websiteId;
@@ -20,6 +23,8 @@ public class Website implements WebsiteSubject {
         this.lastChecked = new Date();
         this.lastModified = new Date();
         this.observers = new ArrayList<>();
+        this.comparisonStrategy = new ContentSizeStrategy(); // Default strategy
+        this.lastContent = ""; // Initialize with empty content
     }
     
     @Override
@@ -44,23 +49,56 @@ public class Website implements WebsiteSubject {
     }
     
     public boolean checkForUpdates() {
-        // Mock implementation - in real system would fetch actual content
-        System.out.println("Checking website: " + url);
+        System.out.println("Checking website: " + url + " using " + comparisonStrategy.getStrategyName());
         lastChecked = new Date();
         
-        // Simulate random updates
-        if (Math.random() > 0.7) {
+        // Mock implementation - simulate fetching new content
+        String newContent = fetchContent();
+        
+        // Use strategy to compare content
+        boolean hasChanged = comparisonStrategy.hasChanged(lastContent, newContent);
+        
+        if (hasChanged) {
             lastModified = new Date();
-            String updateInfo = "Content updated at " + lastModified;
+            lastContent = newContent;
+            String updateInfo = "Content updated at " + lastModified + " (detected by " + 
+                              comparisonStrategy.getStrategyName() + ")";
             notifyObservers(updateInfo);
             return true;
         }
+        
         return false;
     }
     
+    private String fetchContent() {
+        // Mock implementation - simulate different content scenarios
+        double random = Math.random();
+        
+        if (random > 0.7) {
+            // 30% chance of content change
+            return "<html><body><h1>Updated Content</h1><p>New text at " + 
+                   new Date().getTime() + "</p></body></html>";
+        } else if (random > 0.5) {
+            // 20% chance of only size change
+            return lastContent + " ";
+        } else {
+            // 50% chance of no change
+            return lastContent;
+        }
+    }
+    
     public String getContent() {
-        // Mock implementation
-        return "Mock content for " + url;
+        return lastContent;
+    }
+    
+    // Strategy pattern methods
+    public void setComparisonStrategy(ComparisonStrategy strategy) {
+        this.comparisonStrategy = strategy;
+        System.out.println("Changed comparison strategy for " + url + " to " + strategy.getStrategyName());
+    }
+    
+    public ComparisonStrategy getComparisonStrategy() {
+        return comparisonStrategy;
     }
     
     // Getters and setters
