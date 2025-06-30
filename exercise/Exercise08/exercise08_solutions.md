@@ -22,21 +22,54 @@ CI helps detect integration problems early by merging code changes frequently.
 
 ## 3. Docker Container for Website Monitor
 
-Created Dockerfile and DockerMain.java for command line usage.
+Modified Main.java to support command-line arguments and continuous monitoring. The application now runs in a loop until stopped with Ctrl+C.
 
 **Build and run commands:**
 ```bash
 mvn clean package
 docker build -t website-monitor .
-docker run website-monitor https://www.google.com
 ```
 
-**Output:**
+**Usage Examples:**
+
+1. **Default mode** (uses hardcoded test data):
+```bash
+docker run website-monitor
 ```
-Monitoring: https://www.google.com
-Status Code: 200
-Response Time: 590ms
-Status: UP
+
+2. **Monitor specific URLs**:
+```bash
+docker run website-monitor https://www.google.com https://www.github.com
+```
+
+3. **Custom check interval** (default is 60 seconds):
+```bash
+docker run website-monitor --interval 30 https://www.google.com
+```
+
+**Features:**
+- Continuous monitoring loop (Ctrl+C to stop)
+- Command-line URL arguments
+- Configurable check interval
+- Falls back to hardcoded test data if no URLs provided
+- Uses Observer pattern for notifications
+- Uses Strategy pattern for comparison methods
+- Displays metrics every 5 checks
+
+**Example Output:**
+```
+=== Website Monitor System with Observer & Strategy Patterns ===
+
+Monitoring URLs: [https://www.google.com]
+
+--- Creating Custom Subscriptions ---
+Added monitoring for: https://www.google.com
+
+=== Starting Continuous Monitoring (Ctrl+C to stop) ===
+Check interval: 60 seconds
+
+--- Check #1 at Mon Jun 30 11:20:00 CEST 2025 ---
+[Monitoring output...]
 ```
 
 ## 4. Tool for CI/CD pipelines
