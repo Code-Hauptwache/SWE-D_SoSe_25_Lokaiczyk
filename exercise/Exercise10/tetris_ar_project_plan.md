@@ -87,3 +87,42 @@ I would implement a free-to-play model with in-app purchases for the Tetris AR a
 - Average revenue per paying user: €20/year = €300,000/year
 - Ad revenue from non-paying users: €0.50/user/year = €242,500/year
 - Estimated first-year revenue: €542,500
+
+# Task 3: Staffing for Minimal Time to Market
+
+## Core Team Structure (8 members)
+- 1 Project Manager (coordinates, removes obstacles)
+- 2 AR Specialists (AR implementation, spatial mapping)
+- 2 Game Developers (core Tetris mechanics, UI)
+- 1 UX Designer (AR interface design)
+- 1 QA Specialist (continuous testing)
+- 1 DevOps Engineer (build pipeline, deployment)
+
+## Phase-Specific Staffing Allocation
+- **Requirements Phase**: Project Manager + UX Designer (2)
+- **Design Phase**: Project Manager + UX Designer + 1 AR Specialist (3)
+- **Development Phase**: 2 AR Specialists + 2 Game Developers (4)
+- **Testing Phase**: QA Specialist + 1 Game Developer + 1 AR Specialist (3)
+- **Deployment Phase**: DevOps Engineer + Project Manager (2)
+
+## Personality Balance
+- Mix of task-oriented (developers), self-oriented (PM), and interaction-oriented (UX, QA) team members
+- Prevents single-focus issues like "everyone wants to do their own thing" or "too much chatting"
+
+## Organizational Approach
+- Informal agile structure with minimal hierarchy
+- Daily standups and weekly demos
+- Tasks assigned based on expertise but with cross-training
+- Co-located workspace for quick problem-solving
+
+## Motivation Strategy
+- Technical challenge of AR development (task-oriented)
+- Clear milestones with celebrations (self-oriented)
+- Team activities and collaborative environment (interaction-oriented)
+
+## Time-to-Market Accelerators
+1. Parallel development (AR integration alongside game mechanics)
+2. Early working prototypes for continuous testing
+3. Feature prioritization based on MVP approach
+4. Cross-training to prevent bottlenecks
+5. Shared code ownership for faster issue resolution
