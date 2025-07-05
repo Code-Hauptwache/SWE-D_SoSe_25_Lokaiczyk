@@ -142,3 +142,15 @@ I would use Agile with Scrum for the Tetris AR app because:
 4. **Risk management**: Frequent demos help identify technical AR challenges early
 
 5. **Team motivation**: Sprint goals and incremental progress keep the team engaged and focused
+
+# Task 5: Options for Over-Budget and Delayed Project
+
+1. **Feature Prioritization**: Implement MVP features only, delaying non-essential features for post-launch updates (reduces remaining development time)
+
+2. **Resource Reallocation**: Reorganize team with more overlapping responsibilities so members understand each other's work, as suggested in slide
+
+3. **Buy vs. Build**: Replace custom components with pre-built solutions or middleware
+
+4. **Scope Reduction**: Negotiate with stakeholders to reduce requirements while maintaining core functionality
+
+5. **Parallel Development**: Restructure remaining work for maximum parallel development, focusing resources on critical path tasks while accepting higher integration risk
