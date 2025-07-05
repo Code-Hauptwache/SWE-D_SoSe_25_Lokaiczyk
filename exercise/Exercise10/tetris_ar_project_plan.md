@@ -126,3 +126,19 @@ I would implement a free-to-play model with in-app purchases for the Tetris AR a
 3. Feature prioritization based on MVP approach
 4. Cross-training to prevent bottlenecks
 5. Shared code ownership for faster issue resolution
+
+# Task 4: Software Development Process
+
+## Agile (Scrum)
+
+I would use Agile with Scrum for the Tetris AR app because:
+
+1. **Adaptability**: AR technology is evolving rapidly; Agile allows us to adjust requirements as we learn
+
+2. **Informal structure**: As noted in the lecture slides, Agile promotes open information exchange through informal team organization
+
+3. **Early feedback**: Regular 2-week sprints produce playable prototypes quickly, essential for testing AR interactions
+
+4. **Risk management**: Frequent demos help identify technical AR challenges early
+
+5. **Team motivation**: Sprint goals and incremental progress keep the team engaged and focused
